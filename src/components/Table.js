@@ -1,11 +1,8 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Like from './Like';
 
 class Table extends Component {
-  
-    constructor(props) {
-      super(props);
-    }
+
     render() {
         return (
             <div className="custom-table">
@@ -16,7 +13,7 @@ class Table extends Component {
                     <thead className="thead-light">
                         <tr>
                             {this.props.columns.map(column => (
-                                <th scope="col">{column.header}</th>
+                                <th className="clickable" scope="col" onClick={() => this.props.onSort(column.accessor)} >{column.header}</th>
                             ))}
                             <th></th>
                             <th></th>
@@ -29,7 +26,7 @@ class Table extends Component {
                                     <td>{row[column.accessor]}</td>
                                 ))}
                                 <td>
-                                    <Like active={row.favorite} onClick={() => this.props.toggleLike(row.id)}/>
+                                    <Like active={row.favorite} onClick={() => this.props.toggleLike(row.id)} />
                                 </td>
                                 <td>
                                     <button type="button" onClick={() => this.props.onDelete(row.id)} class="btn btn-danger">Delete</button>

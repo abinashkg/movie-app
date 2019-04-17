@@ -5,19 +5,19 @@ import './App.css';
 import Pagination from './components/Pagination.js';
 
 class App extends Component {
-  
+
   constructor(props) {
     super(props);
     this.state = {
       genres: ["All Genres", "Action", "Comedy", "Thriller"],
       movies: [
         {
-            "id": "1",
-            "title": "The Hangover",
-            "rank": "18",
-            "genre": "Comedy",
-            "rate": "8.5",
-            "favorite": false
+          "id": "1",
+          "title": "The Hangover",
+          "rank": "18",
+          "genre": "Comedy",
+          "rate": "8.5",
+          "favorite": false
         },
         {
           "id": "2",
@@ -110,44 +110,73 @@ class App extends Component {
       ],
       selectedGenre: "All Genres",
       currentPage: "1",
-      pageSize: "3"
+      pageSize: "3",
+      sortData: {
+        column: "id",
+        order: "asc"
+      }
     };
   }
 
+   
+
   filterByGenre = () => {
-    if(this.state.selectedGenre === "All Genres"){
-      return this.state.movies;
+    
+    const sortBy = (key, order) => {
+      const moveSmaller = (order === "des") ? 1 : -1;
+      const moveLarger = (order === "des") ? -1 : 1;
+      return (a, b) => {
+        if (a[key] < b[key]) {
+          return moveSmaller;
+        }
+        if (a[key] > b[key]) {
+          return moveLarger;
+        }
+        return 0;
+      };
+    };
+    var movieList = Object.assign([], this.state.movies);
+    if (this.state.selectedGenre !== "All Genres") {
+      movieList = movieList.filter(m => (m.genre === this.state.selectedGenre));
     }
-    else{
-      return this.state.movies.filter(m => (m.genre === this.state.selectedGenre));
-    }
+    console.log(movieList);
+    return movieList.sort(sortBy(this.state.sortData.column, this.state.sortData.order));
   }
 
-  setGenreFilter(genre){
+  setGenreFilter(genre) {
     this.setState({
       selectedGenre: genre,
       currentPage: "1"
     });
   }
 
-  makeFavorite(id){
+  makeFavorite(id) {
     this.setState({
       movies: this.state.movies.map(movie =>
         movie.id === id ? { ...movie, favorite: !movie.favorite } : movie
       )
     });
-    
+
   }
 
-  setCurrentPage(pageNum){
+  setCurrentPage(pageNum) {
     this.setState({
       currentPage: pageNum
     });
   }
 
-  deleteMovie(id){
+  deleteMovie(id) {
     this.setState({
       movies: this.state.movies.filter(movie => movie.id !== id)
+    });
+  }
+
+  setSortColumn(sortColumn) {
+    const sortData = { ...this.state.sortData};
+    sortData.order = (sortData.column !== sortColumn || sortData.order === "des")? "asc" : "des";
+    sortData.column = sortColumn;
+    this.setState({
+      sortData
     });
   }
 
@@ -182,13 +211,13 @@ class App extends Component {
         <div className="container mt-5">
           <div className="row">
             <div className="col-4">
-              <ListGroup data= {this.state.genres} onClick={selectedGenre => this.setGenreFilter(selectedGenre)}/>
+              <ListGroup data={this.state.genres} onClick={selectedGenre => this.setGenreFilter(selectedGenre)} />
             </div>
             <div className="col-8">
-              <Table  columns={columns} data={currentMoviePage} totalItem={totalMovies}
-              toggleLike={id => this.makeFavorite(id)} onDelete={id => this.deleteMovie(id)}/>
-              <Pagination pageSize={this.state.pageSize} totalItem={totalMovies} 
-              currentPage ={this.state.currentPage} onClick={pageNum => this.setCurrentPage(pageNum)}
+              <Table columns={columns} data={currentMoviePage} totalItem={totalMovies} onSort={sortColumn => this.setSortColumn(sortColumn)}
+                toggleLike={id => this.makeFavorite(id)} onDelete={id => this.deleteMovie(id)} />
+              <Pagination pageSize={this.state.pageSize} totalItem={totalMovies}
+                currentPage={this.state.currentPage} onClick={pageNum => this.setCurrentPage(pageNum)}
               />
             </div>
           </div>

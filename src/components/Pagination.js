@@ -8,12 +8,12 @@ function Pagination(props) {
                 {
                     Array(numPages).fill(null).map((row, index) => (
                         <li class="page-item">
-                            <button type="button" href="#" onClick={()=>props.onClick(index+1)}
-                            className= {parseInt(props.currentPage) ===(index+1)? "btn btn-primary":"btn btn-light"}>
-                                {index+1}
+                            <button type="button" href="#" onClick={() => props.onClick(index + 1)}
+                                className={parseInt(props.currentPage) === (index + 1) ? "btn btn-primary" : "btn btn-light"}>
+                                {index + 1}
                             </button>
                         </li>
-                        )
+                    )
                     )
                 }
             </ul>
