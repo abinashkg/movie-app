@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import Like from './Like';
+import { faSortUp, faSortDown} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class Table extends Component {
 
@@ -13,7 +15,13 @@ class Table extends Component {
                     <thead className="thead-light">
                         <tr>
                             {this.props.columns.map(column => (
-                                <th className="clickable" scope="col" onClick={() => this.props.onSort(column.accessor)} >{column.header}</th>
+                                <th className="clickable" scope="col" onClick={() => this.props.onSort(column.accessor)} >
+                                    {column.header}{` `}
+                                    {(this.props.sortData.column === column.accessor)?(
+                                        <FontAwesomeIcon icon={this.props.sortData.order === "asc" ? faSortUp : faSortDown}/>
+                                    ): null}
+                                    
+                                </th>
                             ))}
                             <th></th>
                             <th></th>
