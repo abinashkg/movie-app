@@ -6,6 +6,8 @@ import Login from "./components/Login";
 import Notfound from "./components/NotFound";
 import Users from "./components/Users";
 import Dashboard from "./components/Dashboard";
+import Logout from "./components/Logout";
+import PrivateRoute from './components/PrivateRoute'
 
 class App extends Component {
   render() {
@@ -19,13 +21,14 @@ class App extends Component {
           </ul>
           <ul className="nav navbar-nav  navbar-left">
             <li><Link to={'/dashboard'} className="nav-link"> Dashboard </Link></li>
-            <li><Link to={'/signout'} className="nav-link">Signout</Link></li>
+            <li><Link to={'/logout'} className="nav-link">Logout</Link></li>
           </ul>
         </nav>
         <div className="container mt-5">
           <Switch>
-              <Route exact path='/' component={Login} />
-              <Route path='/movies' component={Movies} />
+              <Route exact path='/login' component={Login} />
+              <Route exact path='/logout' component={Logout} />
+              <PrivateRoute path='/' exact component={Movies} />
               <Route path="/dashboard" component={Dashboard} />
               <Route path="/users/:id" component={Users} />
               <Route component={Notfound} />

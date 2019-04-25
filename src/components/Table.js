@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Like from './Like';
+import { Link } from 'react-router-dom';
 import { faSortUp, faSortDown} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -31,7 +32,11 @@ class Table extends Component {
                         {this.props.data.map(row => (
                             <tr>
                                 {this.props.columns.map(column => (
-                                    <td>{row[column.accessor]}</td>
+                                    <td>
+                                        {(column.accessor === 'title')? (
+                                            <Link to={'/movies/'+row.id} >{row[column.accessor]}</Link>
+                                        ):row[column.accessor]}
+                                    </td>
                                 ))}
                                 <td>
                                     <Like active={row.favorite} onClick={() => this.props.toggleLike(row.id)} />
